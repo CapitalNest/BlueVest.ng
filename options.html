@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdrawal Option</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffffff, #e8f0ff);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 420px;
+      width: 100%;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 30px 20px;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .container h1 {
+      font-size: 1.8rem;
+      color: #1a1a1a;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f7faff;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      padding: 15px 20px;
+      margin: 12px 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .option:hover {
+      border-color: #0056ff;
+      box-shadow: 0 4px 15px rgba(0,86,255,0.15);
+      transform: scale(1.03);
+      background: #f0f5ff;
+    }
+
+    .option img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-right: 15px;
+    }
+
+    .option span {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #222;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px 15px;
+      }
+
+      .option img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .option span {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Select Withdrawal Option</h1>
+
+    <div class="option" onclick="window.location.href='withdraw.html'">
+      <img style="border-radius: 1px; width: 35px; height: 35px;" src="https://th.bing.com/th/id/OIP.0tedQhMeBulqD0A0CsantAHaHa?w=186&h=186&c=7&r=0&o=7&cb=12&pid=1.7&rm=3" alt="Local Bank Logo">
+      <span>Withdraw Using Local Bank</span>
+    </div>
+
+    <!-- <div class="option" onclick="window.location.href='#'">
+      <img style="border: 1px; width: 35px; height: 35px;" src="https://th.bing.com/th/id/OIP.wA3ExWVsiaYpX7A9qmcncQHaHa?o=7&cb=12rm=3&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Giveaway Logo">
+      <span>Withdraw Using Giveaway Code</span>
+    </div> -->
+
+    <div class="footer">
+      💳 Safe • Secure • Fast Transaction
+    </div>
+  </div>
+
+</body>
+</html>

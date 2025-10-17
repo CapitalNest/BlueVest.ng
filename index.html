@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bluevest | Sign Up</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  * {box-sizing: border-box; margin:0; padding:0; font-family: 'Poppins', sans-serif;}
+
+  body {
+    background: #f8faff;
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.5s, color 0.5s;
+  }
+
+  body.dark {
+    background: #0b1120;
+    color: #fff;
+  }
+
+  .loader {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #003366, #000814);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeOut 1s ease 3s forwards;
+    color: #fff;
+  }
+
+  .loader .circle {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 5px solid #00bfff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    box-shadow: 0 0 25px #00bfff;
+  }
+
+  .loader span {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 0 10px #00bfff;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes spin {to {transform: rotate(360deg);}}
+  @keyframes pulse {0%,100%{opacity:1;text-shadow:0 0 10px #00bfff;}50%{opacity:0.6;text-shadow:0 0 25px #4dcaff;}}
+  @keyframes fadeOut {to {opacity:0;visibility:hidden;}}
+
+  .container {
+    background: rgba(255,255,255,0.9);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.08);
+    width: 90%;
+    max-width: 400px;
+    transition: background 0.5s, color 0.5s;
+  }
+
+  body.dark .container {
+    background: rgba(20,20,35,0.85);
+    box-shadow: 0 0 30px rgba(30,144,255,0.3);
+  }
+
+  .header {text-align: center; margin-bottom: 25px;}
+  .header h2 {font-size: 1.8rem; color: #007bff;}
+
+  .instruction {font-size: 14px; color: #555; margin-bottom: 18px; line-height: 1.5;}
+  body.dark .instruction {color: #ccc;}
+
+  .input-group {position: relative; margin-bottom: 18px;}
+  .input-group input {
+    width: 100%;
+    padding: 12px 40px 12px 14px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    font-size: 15px;
+    background: #fff;
+    transition: border 0.3s;
+  }
+  body.dark .input-group input {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+  }
+  .input-group input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0,123,255,0.3);
+  }
+  .input-group i {position: absolute; right: 14px; top: 12px; color: #007bff; font-size: 18px;}
+
+  button {
+    width: 100%;
+    background: linear-gradient(90deg, #007bff, #00bfff);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.4s;
+  }
+  button:hover {box-shadow: 0 0 18px rgba(0,123,255,0.5);}
+
+  .redirect {text-align: center; margin-top: 18px; font-size: 14px;}
+  .redirect a {color: #007bff; text-decoration: none; font-weight: 600;}
+
+  .toggle-mode {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: #007bff;
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  .alert-box {
+    display: none;
+    background: rgba(0,123,255,0.1);
+    border: 1px solid rgba(0,123,255,0.3);
+    color: #007bff;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {from {opacity:0;} to {opacity:1;}}
+
+  @media (max-width: 480px) {
+    .container {padding: 30px 20px; border-radius: 15px;}
+    .header h2 {font-size: 1.5rem;}
+  }
+
+  /* ✅ Warning Modal Styling */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.4s ease;
+  }
+  .modal-box {
+    background: #fff;
+    padding: 25px;
+    max-width: 450px;
+    width: 90%;
+    border-radius: 15px;
+    text-align: left;
+    box-shadow: 0 0 30px rgba(0,0,0,0.2);
+    animation: scaleIn 0.4s ease;
+  }
+  @keyframes scaleIn {from{transform: scale(0.8);opacity:0;}to{transform:scale(1);opacity:1;}}
+  body.dark .modal-box {background: #121826; color: #fff;}
+  .modal-box h3 {font-size: 20px; color: #d62828; margin-bottom: 12px; text-align: center;}
+  .modal-box p {font-size: 14px; line-height: 1.5; margin-bottom: 10px;}
+  .modal-buttons {text-align: center; margin-top: 15px;}
+  .modal-buttons button {
+    width: auto;
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+  .agree-btn {
+    background: linear-gradient(90deg, #007bff, #00bfff);
+    color: #fff;
+  }
+  .cancel-btn {
+    background: #ccc;
+    color: #222;
+  }
+  body.dark .cancel-btn {background:#444; color:#fff;}
+</style>
+</head>
+<body>
+  <div class="loader">
+    <div class="circle"></div>
+    <span>BLUEVEST</span>
+  </div>
+
+  <button style="width: 100px;" class="toggle-mode" onclick="toggleMode()">dark mode</button>
+
+  <div class="container">
+    <div class="header">
+      <h2>Create Account</h2>
+    </div>
+
+    <div style="color: red; font-size: 10px;" class="instruction">
+      Account Access Notice:
+For your security, your account is linked to this specific device and browser. You must always log in using the same browser. Please avoid clearing your browsing data or history, as doing so may result in loss of access to your account.
+If this happens, you can recover your account and funds by contacting our support team via email. Account recovery requests may take up to three (3) working days, but rest assured, your access and funds will be fully restored.
+    </div>
+
+    <div id="alertBox" class="alert-box">Signup successful! You can now log in.</div>
+
+    <div class="input-group">
+      <input type="text" id="fullname" placeholder="Full Name">
+      <i>👤</i>
+    </div>
+
+    <div class="input-group">
+      <input type="email" id="email" placeholder="Email Address">
+      <i>📧</i>
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Password">
+      <i>🔒</i>
+    </div>
+
+    <div class="input-group">
+      <input type="text" id="text" placeholder="Referral code ?">
+      <i></i>
+    </div>
+
+    <button onclick="showWarning()">Sign Up</button>
+    <div class="redirect"></div>
+  </div>
+
+  <!-- ✅ Warning Modal -->
+  <div class="modal-overlay" id="warningModal">
+    <div class="modal-box">
+      <h3>⚠ Important Warning — Please Read Carefully</h3>
+      <p>This platform operates as a Ponzi scheme. This means:</p>
+      <p>• You should only invest money you can afford to lose completely.<br>
+         • Some users may earn returns, but many will lose part or all of their investment.<br>
+         • The scheme relies on new users joining to pay earlier investors — this is unsustainable and will eventually collapse.<br>
+         • No one knows how long the scheme will last.<br>
+         • We are committed to full transparency about the risks involved.<br>
+         • By participating, you accept full responsibility for any losses incurred.<br>
+         • This is not a scam, but it is a high-risk investment.<br>
+         • We do not take responsibility for any financial losses.<br>
+         • Please exercise caution, do your own research, and invest wisely.<br>
+         • If you do not agree to these terms, do NOT participate.
+      </p>
+      <div class="modal-buttons">
+        <button class="agree-btn" onclick="proceedSignup()">I Understand & Agree</button>
+        <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Redirect if user already signed up
+    const existingUser = localStorage.getItem('bluevestUser');
+    if (existingUser) {
+      window.location.href = 'login.html';
+    }
+
+    function showWarning() {
+      const fullname = document.getElementById('fullname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!fullname || !email || !password) {
+        alert("Please fill all fields.");
+        return;
+      }
+
+      // Show modal
+      document.getElementById('warningModal').style.display = 'flex';
+    }
+
+    function proceedSignup() {
+      const fullname = document.getElementById('fullname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const alertBox = document.getElementById('alertBox');
+
+      const user = { fullname, email, password };
+      localStorage.setItem('bluevestUser', JSON.stringify(user));
+
+      closeModal();
+      alertBox.style.display = 'block';
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 2000);
+    }
+
+    function closeModal() {
+      document.getElementById('warningModal').style.display = 'none';
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bluevest | Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  * {box-sizing: border-box; margin:0; padding:0; font-family: 'Poppins', sans-serif;}
+
+  body {
+    background: #f8faff;
+    color: #222;
+    min-height: 100vh;
+    transition: background 0.5s, color 0.5s;
+    overflow-x: hidden;
+  }
+
+  body.dark {
+    background: #0b1120;
+    color: #fff;
+  }
+
+  /* Loader */
+  .loader {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #003366, #000814);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: #fff;
+    animation: fadeOut 1s ease 3s forwards;
+  }
+
+  .loader .circle {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 5px solid #00bfff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    box-shadow: 0 0 25px #00bfff;
+  }
+
+  .loader span {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 0 10px #00bfff;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes spin {to {transform: rotate(360deg);}}
+  @keyframes pulse {
+    0%,100%{opacity:1;text-shadow:0 0 10px #00bfff;}
+    50%{opacity:0.6;text-shadow:0 0 25px #4dcaff;}
+  }
+  @keyframes fadeOut {to {opacity:0;visibility:hidden;}}
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    border-radius: 0 0 20px 20px;
+    transition: background 0.5s, color 0.5s;
+  }
+
+  body.dark header {
+    background: rgba(20,20,35,0.85);
+    box-shadow: 0 0 25px rgba(0,123,255,0.2);
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #007bff;
+    object-fit: cover;
+  }
+
+  .user-info span {
+    font-weight: 600;
+    font-size: 16px;
+    color: #007bff;
+  }
+
+  .toggle-mode {
+    background: #007bff;
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  /* Main content */
+  .content {
+    padding: 30px 20px;
+    text-align: center;
+  }
+
+  .content h2 {
+    font-size: 1.8rem;
+    color: #007bff;
+    margin-bottom: 15px;
+  }
+
+  .content p {
+    color: #555;
+    line-height: 1.6;
+  }
+
+  body.dark .content p {
+    color: #ccc;
+  }
+
+  @media (max-width: 480px) {
+    header {padding: 14px 16px;}
+    .user-info span {font-size: 15px;}
+    .content h2 {font-size: 1.5rem;}
+  }
+</style>
+</head>
+<body>
+  <div class="loader">
+    <div class="circle"></div>
+    <span>BLUEVEST</span>
+  </div>
+
+  <header>
+    <div class="user-info">
+      <img src="data:image/webp;base64,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" alt="User Logo">
+      <span id="welcomeName"></span>
+    </div>
+    <button class="toggle-mode" onclick="toggleMode()">🌙</button>
+  </header>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+/* --- Your original styles below --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: black;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* .loader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+} */
+
+/* .loader span {
+  width: 20px; height: 20px;
+  margin: 8px;
+  background: #00ff99;
+  border-radius: 50%;
+  animation: bounce 0.8s infinite alternate;
+} */
+
+/* .loader span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loader span:nth-child(3) {
+  animation-delay: 0.4s;
+} */
+
+/* @keyframes bounce {
+  to {
+    transform: translateY(-20px);
+    background: #00ccff;
+  }
+} */
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo i {
+  color: #00ffcc;
+}
+
+.plans-btn {
+  padding: 10px 20px;
+  border: none;
+  background: #00ccff;
+  color: #000;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.plans-btn:hover {
+  background: #00ffaa;
+}
+
+.balance-section {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.balance-section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+.balance-section p {
+  font-size: 1.2rem;
+  color: #00ffaa;
+}
+
+.convert-btn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  background: #ffcc00;
+  color: #000;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.convert-btn:hover {
+  background: #ffd633;
+}
+
+nav {
+  margin-top: auto;
+  background: #1a1a2e;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #333;
+}
+
+nav a {
+  color: #ccc;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+nav i {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 5px;
+}
+
+nav a.active, nav a:hover {
+  color: #00ffcc;
+}
+</style>
+</head>
+<body>
+
+<!-- <div class="loader" id="loader" aria-label="Loading animation">
+  <span></span><span></span><span></span>
+</div> -->
+
+<header>
+  <!-- <div class="logo"><i class="fas fa-coins" aria-hidden="true"></i> Fundify</div> -->
+
+</header>
+
+<main class="balance-section">
+  <h2 style="font-weight: bold; font-family: Arial, Helvetica, sans-serif;">User Balance</h2>
+  <p style="color: white; font-weight: bold; font-family: Arial, Helvetica, sans-serif; font-size: 30px;" id="balance" aria-live="polite">$0.00</p>
+  <!-- <button class="convert-btn" type="button" onclick="convertBalance()">Convert to USDT</button> -->
+
+
+<br><br>
+<hr>
+<br><br>
+   <a style="border: none; outline: none;" href="./plans.html">  <button class="plans-btn" type="button">Plans</button>
+</a>
+  <br><br><p><a style="outline: none; border: none; color: rgb(22, 173, 22); text-decoration: none;" href="referral.html">Refer</a></p>
+
+</main>
+
+<nav role="navigation" aria-label="Main navigation">
+  <a href="#" class="active"><i class="fas fa-home" aria-hidden="true"></i>Home</a>
+  <a href="./options2.html"><i class="fas fa-wallet" aria-hidden="true"></i>Deposit</a>
+  <a href="./options.html"><i class="fas fa-money-bill-wave" aria-hidden="true"></i>Withdraw</a>
+  <a href="./Contact.html"><i class="fas fa-user" aria-hidden="true"></i>Contact us</a>
+</nav>
+
+<script>
+  window.onload = () => {
+    // 1) Initialize dashboardBalance with 0 if not present
+    if (!localStorage.getItem('dashboardBalance')) {
+      localStorage.setItem('dashboardBalance', '0');
+    }
+
+    // 2) If a pendingDepositAmount exists, add it to dashboardBalance and clear it
+    const pending = localStorage.getItem('pendingDepositAmount');
+    if (pending && !isNaN(pending)) {
+      let currentBalance = parseInt(localStorage.getItem('dashboardBalance'), 10);
+      currentBalance += parseInt(pending, 10);
+      localStorage.setItem('dashboardBalance', currentBalance.toString());
+      localStorage.removeItem('pendingDepositAmount');
+    }
+
+    // 3) Display current balance properly formatted
+    const currentBalance = localStorage.getItem('dashboardBalance');
+    const balanceEl = document.getElementById('balance');
+    balanceEl.innerText = `₦${Number(currentBalance).toLocaleString()}`;
+
+    // 4) Hide loader after 2 seconds
+    setTimeout(() => {
+      const loader = document.getElementById('loader');
+      if (loader) loader.style.display = 'none';
+    }, 2000);
+  };
+
+  function convertBalance() {
+    const balanceEl = document.getElementById("balance");
+    const text = balanceEl.innerText.replace(/[$,]/g, '');
+    if (!balanceEl.innerText.includes("USDT")) {
+      const naira = parseFloat(text);
+      const usdtRate = 1500;
+      const usdt = (naira / usdtRate).toFixed(2);
+      balanceEl.innerText = `${usdt} USDT`;
+    } else {
+      const storedBalance = localStorage.getItem('dashboardBalance') || '0';
+      balanceEl.innerText = `₦${Number(storedBalance).toLocaleString()}`;
+    }
+  }
+</script>
+
+</body>
+</html>
+
+  <script>
+    // Theme control
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    // Load user data
+    const userData = JSON.parse(localStorage.getItem('bluevestUser'));
+    if (!userData) {
+      window.location.href = 'login.html';
+    } else {
+      const firstName = userData.fullname.trim().split(' ')[0];
+      document.getElementById('welcomeName').textContent = `Welcome, ${firstName}`;
+    }
+  </script>
+</body>
+</html>

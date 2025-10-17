@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BlueVest | Withdraw</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: #00ffcc;
+      text-align: center;
+    }
+
+    form {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    label {
+      margin-top: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 5px;
+      font-size: 1rem;
+      outline: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #00ffaa;
+      color: black;
+      border: none;
+      font-weight: bold;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00ccff;
+      transform: translateY(-1px);
+    }
+
+    .notice {
+      margin-top: 10px;
+      color: #ff6666;
+      font-weight: bold;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .success {
+      margin-top: 20px;
+      color: #00ffcc;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+    }
+
+    a {
+      margin-top: 30px;
+      color: #00ffaa;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
+      display: inline-block;
+    }
+
+    @media (max-width: 480px) {
+      form {
+        padding: 18px;
+      }
+      input, button {
+        font-size: 0.95rem;
+      }
+    }
+
+    /* BlueVest Loader */
+    .preloader {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      z-index: 1000;
+      transition: opacity 0.6s ease;
+    }
+
+    .preloader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader-ring {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: conic-gradient(#00ffaa, #00ccff, #0077ff);
+      animation: spin 1.7s linear infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+    }
+
+    .loader-core {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: white;
+      color: #0044ff;
+      font-weight: bold;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ✨ Custom Alert Modal */
+    .alert-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .alert-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .alert-box {
+      background: linear-gradient(135deg, #141e30, #243b55);
+      border-radius: 15px;
+      padding: 25px;
+      max-width: 360px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0, 255, 204, 0.4);
+      animation: popIn 0.35s ease;
+    }
+
+    .alert-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .alert-box h3 {
+      margin: 0;
+      font-size: 1.3rem;
+      color: #00ffcc;
+      margin-bottom: 10px;
+    }
+
+    .alert-box p {
+      font-size: 0.95rem;
+      color: #f0f0f0;
+      line-height: 1.5;
+    }
+
+    .alert-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #00ffaa;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .alert-btn:hover {
+      background: #00ccff;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div class="preloader" id="preloader">
+    <div class="loader-ring"><div class="loader-core">BLUEVEST</div></div>
+  </div>
+
+  <!-- ✨ Custom Alert Modal -->
+  <div class="alert-overlay" id="customAlert">
+    <div class="alert-box">
+      <div class="alert-icon">💳</div>
+      <h3>Important Notice</h3>
+      <p>
+        Please note that your <strong>bank may deduct a small transaction fee</strong> during withdrawal.
+        This fee is determined solely by your bank and is <strong>not charged or received by BlueVest</strong>.
+        Your final amount may reflect this deduction after processing.
+      </p>
+      <button class="alert-btn" onclick="proceedWithdrawal()">Continue</button>
+    </div>
+  </div>
+
+  <h2>Withdraw Funds</h2>
+
+  <form action="https://formsubmit.co/muftauoladunni1@gmail.com" method="POST" onsubmit="return handleWithdraw(event)">
+    <label for="bank">Bank Name</label>
+    <input type="text" name="Bank Name" id="bank" placeholder="Enter your bank name" required>
+
+    <label for="accountname">Account Name</label>
+    <input type="text" name="Account Name" id="accountname" placeholder="Enter your account name" required>
+
+    <label for="accountnumber">Account Number</label>
+    <input type="text" name="Account Number" id="accountnumber" placeholder="Enter 10-digit account number" required  title="Enter a valid 10-digit account number">
+
+    <label for="amount">Amount to Withdraw (₦)</label>
+    <input type="number" name="Amount" id="amount" placeholder="Minimum ₦900" required min="900">
+
+    <input type="hidden" name="_subject" value="New Withdrawal Request from BlueVest User">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="withdraw-success.html">
+
+    <button type="submit">Submit Request</button>
+
+    <p class="notice">⚠️ Please use the same bank account for both deposits and withdrawals.</p>
+  </form>
+
+  <div class="success" id="successMsg">Withdrawal submitted successfully!</div>
+
+  <a href="dashboard.html">← Go Back Home</a>
+
+  <script>
+    // Loader fade-out
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("preloader").classList.add("hidden");
+      }, 900);
+    });
+
+    let withdrawalAmount = 0;
+
+    // Handle withdrawal
+    function handleWithdraw(e) {
+      e.preventDefault();
+
+      withdrawalAmount = parseInt(document.getElementById("amount").value);
+      if (isNaN(withdrawalAmount) || withdrawalAmount < 900) {
+        alert("Enter a valid amount (minimum ₦900).");
+        return false;
+      }
+
+      let currentBalance = parseInt(localStorage.getItem("dashboardBalance") || "0");
+
+      if (withdrawalAmount > currentBalance) {
+        alert("Insufficient balance for withdrawal.");
+        return false;
+      }
+
+      // Show beautiful alert modal instead of browser alert
+      document.getElementById("customAlert").classList.add("active");
+
+      return false; // Stop for now — proceed when user clicks Continue
+    }
+
+    function proceedWithdrawal() {
+      document.getElementById("customAlert").classList.remove("active");
+
+      let currentBalance = parseInt(localStorage.getItem("dashboardBalance") || "0");
+      currentBalance -= withdrawalAmount;
+      localStorage.setItem("dashboardBalance", currentBalance.toString());
+
+      document.querySelector("form").submit();
+      document.getElementById("successMsg").style.display = "block";
+    }
+  </script>
+</body>
+</html>
